@@ -2,11 +2,7 @@ import requests
 import json
 
 def emotion_detector(text_to_analyze):
-    """
-    IBM Watson NLP API ka use karke text mein emotions detect karta hai.
-    Returns: dict with anger, disgust, fear, joy, sadness scores and dominant_emotion
-    """
-    url = 'https://sn-watson-emotion.labs.skills.network/v1/watson.runtime.nlp.v1/NlpService/EmotionPredict'
+    url = "https://sn-watson-emotion.labs.skills.network/v1/watson.runtime.nlp.v1/NlpService/EmotionPredict"
     
     headers = {
         "grpc-metadata-mm-model-id": "emotion_aggregated-workflow_lang_en_stock"
@@ -23,20 +19,16 @@ def emotion_detector(text_to_analyze):
         
         if response.status_code == 200:
             response_data = response.json()
-            
-            # Extract emotion scores
             emotion_predictions = response_data.get('emotion_predictions', [])
             if emotion_predictions:
                 emotion_data = emotion_predictions[0].get('emotion', {})
                 
-                # Extract individual emotions with default values
                 anger = emotion_data.get('anger', 0)
                 disgust = emotion_data.get('disgust', 0)
                 fear = emotion_data.get('fear', 0)
                 joy = emotion_data.get('joy', 0)
                 sadness = emotion_data.get('sadness', 0)
                 
-                # Find dominant emotion
                 emotions = {
                     'anger': anger,
                     'disgust': disgust,
@@ -55,7 +47,6 @@ def emotion_detector(text_to_analyze):
                     'dominant_emotion': dominant_emotion
                 }
         
-        # Agar response 200 nahi hai toh None return karein
         return {
             'anger': None,
             'disgust': None,
@@ -66,7 +57,6 @@ def emotion_detector(text_to_analyze):
         }
         
     except Exception as e:
-        # Error handling
         return {
             'anger': None,
             'disgust': None,
